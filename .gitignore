@@ -13,8 +13,6 @@
 .idea/gradle.xml
 .idea/misc.xml
 .idea/runConfigurations.xml
-build.gradle
-gradle.properties
 gradle/
 gradlew
 gradlew.bat
