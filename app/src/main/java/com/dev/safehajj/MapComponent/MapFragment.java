@@ -36,7 +36,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     private GoogleMap mMap;
 
     private OnFragmentInteractionListener mListener;
-    private float DEFAULT_ZOOM=17;
+    private float DEFAULT_ZOOM=10;
 
     public MapFragment() {
         // Required empty public constructor
