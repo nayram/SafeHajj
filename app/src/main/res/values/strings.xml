@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SafeHajj</string>
     <string name="login">LOGIN</string>
-    <string name="Username">Email</string>
+    <string name="Username">Name</string>
     <string name="Password">Password</string>
     <string name="forgot_your_password">Forgot your password?</string>
     <string name="title_activity_home">HomeActivity</string>

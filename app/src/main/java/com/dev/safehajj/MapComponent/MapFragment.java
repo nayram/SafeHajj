@@ -36,6 +36,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     private GoogleMap mMap;
 
     private OnFragmentInteractionListener mListener;
+    private float DEFAULT_ZOOM=17;
 
     public MapFragment() {
         // Required empty public constructor
@@ -107,9 +108,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         mMap = googleMap;
 
         // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng mecca = new LatLng(21.422510, 39.826168);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mecca,DEFAULT_ZOOM));
+
     }
 
     /**

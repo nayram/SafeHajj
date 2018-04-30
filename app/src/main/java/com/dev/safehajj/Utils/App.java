@@ -10,12 +10,13 @@ import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class App extends Application {
 
     public static SharedPreferences sp;
-
+    public static SafeHajjNetworkInterface hajjNetworkInterface;
 
     @Override
     public void onCreate() {
@@ -25,7 +26,11 @@ public class App extends Application {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(SafeHajjNetworkInterface.domain)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(httpClient.build())
                 .build();
+
+        hajjNetworkInterface=retrofit.create(SafeHajjNetworkInterface.class);
 
     }
 }
