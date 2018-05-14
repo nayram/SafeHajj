@@ -11,6 +11,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dev.safehajj.MapComponent.MapFragment;
@@ -23,6 +25,7 @@ public class HomeActivity extends AppCompatActivity implements MapFragment.OnFra
 
     private FragmentManager fragmentManager;
     private MapFragment mapFragment;
+    private ProgressBar progressBar;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -52,6 +55,8 @@ public class HomeActivity extends AppCompatActivity implements MapFragment.OnFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        progressBar=(ProgressBar)findViewById(R.id.home_progress);
 
         fragmentManager=getSupportFragmentManager();
         mapFragment=MapFragment.newInstance();
@@ -97,5 +102,15 @@ public class HomeActivity extends AppCompatActivity implements MapFragment.OnFra
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        progressBar.setVisibility(View.GONE);
     }
 }

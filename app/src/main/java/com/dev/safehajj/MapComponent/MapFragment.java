@@ -1,20 +1,39 @@
 package com.dev.safehajj.MapComponent;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.dev.safehajj.Pojo.Device;
+import com.dev.safehajj.Pojo.DeviceListResponse;
+import com.dev.safehajj.Pojo.DeviceRequest;
 import com.dev.safehajj.R;
+import com.dev.safehajj.Utils.App;
+import com.dev.safehajj.Utils.GeneralFunctions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,9 +53,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     private String mParam1;
     private String mParam2;
     private GoogleMap mMap;
+    private String TAG=getClass().getName();
 
     private OnFragmentInteractionListener mListener;
-    private float DEFAULT_ZOOM=10;
+    private float DEFAULT_ZOOM=7;
 
     public MapFragment() {
         // Required empty public constructor
@@ -106,11 +126,89 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        Log.d(TAG,"Map Ready");
         // Add a marker in Sydney, Australia, and move the camera.
         LatLng mecca = new LatLng(21.422510, 39.826168);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mecca,DEFAULT_ZOOM));
+        loadDevices();
+    }
 
+
+    void loadDevices(){
+        Log.d(TAG,"Map Load Devices");
+
+        if (mListener!=null)
+        mListener.showProgress();
+
+        DeviceRequest deviceRequest=new DeviceRequest();
+        deviceRequest.setAppId("6");
+        deviceRequest.setToken(GeneralFunctions.getUserToken());
+        deviceRequest.setId(6831);
+        deviceRequest.setLanguage("en-us");
+        deviceRequest.setPageCount(100);
+        deviceRequest.setPageNo(1);
+        deviceRequest.setType(0);
+        deviceRequest.setMapType("google");
+        App.hajjNetworkInterface.getDevices(deviceRequest).enqueue(new Callback<DeviceListResponse>() {
+            @Override
+            public void onResponse(Call<DeviceListResponse> call, Response<DeviceListResponse> response) {
+                Log.d(TAG,"Map Response");
+                if (mListener!=null)
+                    mListener.hideProgress();
+
+                DeviceListResponse deviceListResponse=response.body();
+                Log.d(TAG,"MapFragment:\n"+response.body().toString());
+                if (deviceListResponse!=null){
+                    if (deviceListResponse.getItems().size()>0){
+                        for (Device item:deviceListResponse.getItems()){
+                                addItemOnMap(item);
+                        }
+                    }else{
+                        showToast("No devices found");
+                    }
+                }else{
+                    showToast("No devices found");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<DeviceListResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+    void addItemOnMap(Device device){
+        Log.d(TAG,"Map add device to map");
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+        Bitmap bmp = Bitmap.createBitmap(80, 80, conf);
+        Canvas canvas1 = new Canvas(bmp);
+
+        Paint color = new Paint();
+        color.setTextSize(35);
+        color.setColor(Color.BLACK);
+
+        canvas1.drawBitmap(drawableToBitmap(getResources().getDrawable(R.mipmap.ic_launcher)), 0,0, color);
+        canvas1.drawText(device.getName(), 30, 40, color);
+
+        mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(device.getLatitude(),device.getLongitude()))
+                .icon(BitmapDescriptorFactory.fromBitmap(bmp))
+                // Specifies the anchor to be at a particular point in the marker image.
+                .anchor(0.5f, 1));
+
+    }
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable)drawable).getBitmap();
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+
+
+        return bitmap;
     }
 
     /**
@@ -126,5 +224,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void showProgress();
+        void hideProgress();
+    }
+
+    void showToast(String message){
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 }
