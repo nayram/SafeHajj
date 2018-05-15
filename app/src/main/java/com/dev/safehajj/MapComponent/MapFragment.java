@@ -126,8 +126,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        Log.d(TAG,"Map Ready");
-        // Add a marker in Sydney, Australia, and move the camera.
         LatLng mecca = new LatLng(21.422510, 39.826168);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mecca,DEFAULT_ZOOM));
         loadDevices();
@@ -194,7 +192,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         mMap.addMarker(new MarkerOptions()
                 .position(new LatLng(device.getLatitude(),device.getLongitude()))
                 .icon(BitmapDescriptorFactory.fromBitmap(bmp))
-                // Specifies the anchor to be at a particular point in the marker image.
                 .anchor(0.5f, 1));
 
     }

@@ -16,6 +16,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dev.safehajj.MapComponent.MapFragment;
+import com.dev.safehajj.PilgrimComponent.PilgrimFragment;
 import com.dev.safehajj.R;
 
 import java.lang.reflect.Field;
@@ -25,6 +26,7 @@ public class HomeActivity extends AppCompatActivity implements MapFragment.OnFra
 
     private FragmentManager fragmentManager;
     private MapFragment mapFragment;
+    private PilgrimFragment pilgrimFragment;
     private ProgressBar progressBar;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -37,7 +39,7 @@ public class HomeActivity extends AppCompatActivity implements MapFragment.OnFra
                     setFragment("mapComponent");
                     return true;
                 case R.id.navigation_pilgrims:
-
+                    setFragment("pilgrimComponent");
                     return true;
                 case R.id.navigation_account:
 
@@ -59,7 +61,11 @@ public class HomeActivity extends AppCompatActivity implements MapFragment.OnFra
         progressBar=(ProgressBar)findViewById(R.id.home_progress);
 
         fragmentManager=getSupportFragmentManager();
+
         mapFragment=MapFragment.newInstance();
+
+        pilgrimFragment=PilgrimFragment.newInstance();
+
         fragmentManager.beginTransaction().add(R.id.rl_home_container,mapFragment,"mapComponent").commit();
 
 
@@ -90,6 +96,9 @@ public class HomeActivity extends AppCompatActivity implements MapFragment.OnFra
 
     void setFragment(String component){
         switch (component){
+            case "pilgrimComponent":
+                fragmentManager.beginTransaction().replace(R.id.rl_home_container,pilgrimFragment,component).commit();
+                break;
 
             default:
                 fragmentManager.beginTransaction().replace(R.id.rl_home_container,mapFragment,component).commit();
