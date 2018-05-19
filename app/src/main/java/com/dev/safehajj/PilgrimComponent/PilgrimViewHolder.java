@@ -14,11 +14,15 @@ public class PilgrimViewHolder extends RecyclerView.ViewHolder {
     ImageView pilgrimImg;
     TextView tvPilgrimName;
     TextView tvPilgrimSerial;
+    View itemView;
     public PilgrimViewHolder(View itemView) {
         super(itemView);
         tvPilgrimName=(TextView)itemView.findViewById(R.id.tvPilgrimName);
         pilgrimImg=(ImageView)itemView.findViewById(R.id.imageView);
         tvPilgrimSerial=(TextView)itemView.findViewById(R.id.tvPilgrimSerial);
+        this.itemView=itemView;
+
+
     }
 
 

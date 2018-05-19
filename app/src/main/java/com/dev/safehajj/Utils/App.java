@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -22,12 +23,16 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         sp= getSharedPreferences(Constants.AppPackage, Context.MODE_PRIVATE);
-        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+        OkHttpClient httpClient = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30,TimeUnit.SECONDS)
+                .writeTimeout(30,TimeUnit.SECONDS).build();
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(SafeHajjNetworkInterface.domain)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpClient.build())
+                .client(httpClient)
                 .build();
 
         hajjNetworkInterface=retrofit.create(SafeHajjNetworkInterface.class);

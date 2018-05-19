@@ -42,7 +42,7 @@ public class PilgrimFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String mParam1;
-    private String mParam2;
+    private String mParam2,TAG=getClass().getName();
 
     RecyclerView rcView;
     private MapFragment.OnFragmentInteractionListener mListener;
@@ -145,6 +145,7 @@ public class PilgrimFragment extends Fragment {
 
                 if (deviceListResponse!=null){
                     if (deviceListResponse.getItems().size()>0){
+                        Log.d(TAG,"PILGRIMS "+deviceListResponse.toString());
                         adapter=new PilgrimAdapter(deviceListResponse,getContext());
                         rcView.setAdapter(adapter);
                     }else{

@@ -147,6 +147,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         deviceRequest.setPageNo(1);
         deviceRequest.setType(0);
         deviceRequest.setMapType("google");
+
         App.hajjNetworkInterface.getDevices(deviceRequest).enqueue(new Callback<DeviceListResponse>() {
             @Override
             public void onResponse(Call<DeviceListResponse> call, Response<DeviceListResponse> response) {
@@ -226,6 +227,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
     }
 
     void showToast(String message){
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+
     }
 }

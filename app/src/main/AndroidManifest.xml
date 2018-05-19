@@ -21,6 +21,8 @@
             android:name=".HomeComponent.HomeActivity"
             android:label="@string/title_activity_home"></activity>
 
+        <activity android:name=".DeviceComponent.ActivityDeviceDetails"/>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

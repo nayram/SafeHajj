@@ -14,4 +14,9 @@
     <string name="title_people">Pilgrims</string>
     <string name="title_account">Account</string>
     <string name="title_settings">Settings</string>
+    <string name="no_blood_pressure_data">No data on Blood Pressure</string>
+    <string name="no_heart_beat_data">No data on heat beat</string>
+    <string name="no_blood_sugar_data">No data on blood sugar level</string>
+    <string name="no_distance_data">No data on distance travelled</string>
+    <string name="no_calorie_data">No data on calorie</string>
 </resources>

@@ -9,15 +9,18 @@ import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.dev.safehajj.AccountComponent.AccountFragment;
 import com.dev.safehajj.MapComponent.MapFragment;
 import com.dev.safehajj.PilgrimComponent.PilgrimFragment;
 import com.dev.safehajj.R;
+import com.dev.safehajj.Utils.GeneralFunctions;
 
 import java.lang.reflect.Field;
 
@@ -27,7 +30,10 @@ public class HomeActivity extends AppCompatActivity implements MapFragment.OnFra
     private FragmentManager fragmentManager;
     private MapFragment mapFragment;
     private PilgrimFragment pilgrimFragment;
+    private AccountFragment accountFragment;
     private ProgressBar progressBar;
+    private Toolbar toolbar;
+    String TAG=getClass().getName();
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -42,6 +48,7 @@ public class HomeActivity extends AppCompatActivity implements MapFragment.OnFra
                     setFragment("pilgrimComponent");
                     return true;
                 case R.id.navigation_account:
+                    setFragment("accountComponent");
 
                     return true;
                 case R.id.navigation_settings:
@@ -57,16 +64,23 @@ public class HomeActivity extends AppCompatActivity implements MapFragment.OnFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        toolbar=(Toolbar)findViewById(R.id.toolbar);
 
         progressBar=(ProgressBar)findViewById(R.id.home_progress);
+
+        setSupportActionBar(toolbar);
+
+        setTitle("Home");
 
         fragmentManager=getSupportFragmentManager();
 
         mapFragment=MapFragment.newInstance();
 
         pilgrimFragment=PilgrimFragment.newInstance();
+        accountFragment=AccountFragment.newInstance();
 
         fragmentManager.beginTransaction().add(R.id.rl_home_container,mapFragment,"mapComponent").commit();
+        Log.d(TAG,"User "+ String.valueOf(GeneralFunctions.getUser()));
 
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -98,6 +112,11 @@ public class HomeActivity extends AppCompatActivity implements MapFragment.OnFra
         switch (component){
             case "pilgrimComponent":
                 fragmentManager.beginTransaction().replace(R.id.rl_home_container,pilgrimFragment,component).commit();
+                setTitle("Pilgrims");
+                break;
+            case "accountComponent":
+                fragmentManager.beginTransaction().replace(R.id.rl_home_container,accountFragment,component).commit();
+                setTitle("Account Profile");
                 break;
 
             default:

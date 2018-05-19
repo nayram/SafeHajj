@@ -3,6 +3,8 @@ package com.dev.safehajj.Utils;
 import com.dev.safehajj.Pojo.Device;
 import com.dev.safehajj.Pojo.DeviceListResponse;
 import com.dev.safehajj.Pojo.DeviceRequest;
+import com.dev.safehajj.Pojo.HealthRequest;
+import com.dev.safehajj.Pojo.HealthResponse;
 import com.dev.safehajj.Pojo.LoginResponse;
 import com.dev.safehajj.Pojo.TrackingRequest;
 import com.dev.safehajj.Pojo.TrackingResponse;
@@ -26,5 +28,8 @@ public interface SafeHajjNetworkInterface {
 
     @POST("Device/CheckDevice")
     Call<Device> checkDevice(@Body DeviceRequest deviceRequest);
+
+    @POST("Health/GetHealth")
+    Call<HealthResponse> getHealthData(@Body HealthRequest healthRequest);
 
 }
