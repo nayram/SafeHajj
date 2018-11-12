@@ -6,4 +6,5 @@ public class Constants {
     public static final String UserToken="token";
     public static final String UserLogin="login";
     public static final String UserObj="userObj";
+    public static final String UserImg="userImg";
 }

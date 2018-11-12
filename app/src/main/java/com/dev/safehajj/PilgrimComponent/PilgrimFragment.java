@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.dev.safehajj.MapComponent.MapFragment;
@@ -20,6 +21,7 @@ import com.dev.safehajj.Pojo.DeviceListResponse;
 import com.dev.safehajj.Pojo.DeviceRequest;
 import com.dev.safehajj.R;
 import com.dev.safehajj.Utils.App;
+import com.dev.safehajj.Utils.ConnectionDetector;
 import com.dev.safehajj.Utils.GeneralFunctions;
 
 import retrofit2.Call;
@@ -47,6 +49,8 @@ public class PilgrimFragment extends Fragment {
     RecyclerView rcView;
     private MapFragment.OnFragmentInteractionListener mListener;
     PilgrimAdapter adapter;
+    ConnectionDetector connectionDetector;
+
 
 
     public PilgrimFragment() {
@@ -57,8 +61,6 @@ public class PilgrimFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment PilgrimFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -82,10 +84,12 @@ public class PilgrimFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootview= inflater.inflate(R.layout.fragment_pilgrim, container, false);
         rcView=(RecyclerView)rootview.findViewById(R.id.recViewDevice);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
 
         rcView.setHasFixedSize(true);
         rcView.setLayoutManager(linearLayoutManager);
+        connectionDetector=new ConnectionDetector(getContext());
 
         return rootview;
     }
@@ -93,7 +97,9 @@ public class PilgrimFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        if (connectionDetector.isConnectingToInternet())
         loadDevices();
+        else Toast.makeText(getActivity() , "No internet connection", Toast.LENGTH_SHORT).show();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

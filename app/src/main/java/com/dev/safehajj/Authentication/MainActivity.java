@@ -17,6 +17,7 @@ import com.dev.safehajj.Pojo.UserRequest;
 import com.dev.safehajj.Pojo.UserResponse;
 import com.dev.safehajj.R;
 import com.dev.safehajj.Utils.App;
+import com.dev.safehajj.Utils.ConnectionDetector;
 import com.dev.safehajj.Utils.GeneralFunctions;
 import com.google.gson.Gson;
 
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     EditText etEmail,etPassword;
     ProgressBar login_progress;
     String TAG=getClass().getName();
+    ConnectionDetector connectionDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         etEmail=(EditText)findViewById(R.id.et_email);
         etPassword=(EditText)findViewById(R.id.et_password);
         login_progress=(ProgressBar)findViewById(R.id.login_progress);
+        connectionDetector=new ConnectionDetector(this);
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +54,9 @@ public class MainActivity extends AppCompatActivity {
                 }else if (password.isEmpty()){
                     Toast.makeText(MainActivity.this, "Enter your password", Toast.LENGTH_SHORT).show();
                 }else {
-                  login();
+                    if (connectionDetector.isConnectingToInternet())
+                        login();
+                    else showToast("No internet connection!");
                 }
 
             }
@@ -75,13 +80,14 @@ public class MainActivity extends AppCompatActivity {
         loginBtn.setEnabled(false);
 
         login_progress.setVisibility(View.VISIBLE);
+        Log.d("MainActivity",String.valueOf(request));
 
         App.hajjNetworkInterface.login(request).enqueue(new Callback<LoginResponse>() {
             @Override
             public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
                 login_progress.setVisibility(View.GONE);
                 loginBtn.setEnabled(true);
-                Log.d(TAG,response.body().toString());
+                Log.d("MainActivity",response.body().toString());
                 if (response.body().getAccessToken()!=null){
                     if (!response.body().getAccessToken().isEmpty()){
                         GeneralFunctions.setLoginFlag(true);
@@ -107,7 +113,8 @@ public class MainActivity extends AppCompatActivity {
                 login_progress.setVisibility(View.GONE);
                 loginBtn.setEnabled(true);
                 t.printStackTrace();
-                showToast("Login Failed. Try again!");
+                Log.d("MainActivity",t.getMessage());
+                showToast("Server Failed. Try again!");
             }
         });
     }

@@ -1,6 +1,7 @@
 package com.dev.safehajj.Utils;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 
 import com.dev.safehajj.Pojo.UserResponse;
 import com.google.gson.Gson;
@@ -49,5 +50,25 @@ public class GeneralFunctions {
             return new Gson().fromJson(user,UserResponse.class);
         }else return null;
 
+    }
+
+    public static void setProfileImage(Uri uri){
+        SharedPreferences sharedPreferences=App.sp;
+        SharedPreferences.Editor editor= sharedPreferences.edit();
+        editor.putString(Constants.UserImg,uri.getPath());
+        editor.apply();
+    }
+
+    public static String getProfileImage(){
+        SharedPreferences sharedPreferences=App.sp;
+
+        return sharedPreferences.getString(Constants.UserImg,null);
+    }
+
+    public static void loogout() {
+        SharedPreferences sharedPreferences=App.sp;
+        SharedPreferences.Editor editor= sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 }

@@ -24,6 +24,7 @@ import com.dev.safehajj.Pojo.TrackingRequest;
 import com.dev.safehajj.Pojo.TrackingResponse;
 import com.dev.safehajj.R;
 import com.dev.safehajj.Utils.App;
+import com.dev.safehajj.Utils.ConnectionDetector;
 import com.dev.safehajj.Utils.GeneralFunctions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -66,12 +67,12 @@ public class ActivityDeviceDetails extends AppCompatActivity {
     String TAG=getClass().getName();
 
     SimpleDateFormat format;
-
+    ConnectionDetector connectionDetector;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.user_device_details);
-
+        connectionDetector=new ConnectionDetector(this);
 
         tvDeviceName = (TextView) findViewById(R.id.tvDeviceName);
         titleHealth = (TextView) findViewById(R.id.titleHealth);
@@ -179,7 +180,9 @@ public class ActivityDeviceDetails extends AppCompatActivity {
                     imgHealth.startAnimation(rotateAnimation);
 
                 if (isHealthExpanded){
+                    if (connectionDetector.isConnectingToInternet())
                     loadHealthData();
+                    else Toast.makeText(this, "No internet connection!", Toast.LENGTH_SHORT).show();
                 }else{
                     llHealth.setVisibility(View.GONE);
                 }

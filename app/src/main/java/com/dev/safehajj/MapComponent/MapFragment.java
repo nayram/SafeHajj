@@ -22,6 +22,7 @@ import com.dev.safehajj.Pojo.DeviceListResponse;
 import com.dev.safehajj.Pojo.DeviceRequest;
 import com.dev.safehajj.R;
 import com.dev.safehajj.Utils.App;
+import com.dev.safehajj.Utils.ConnectionDetector;
 import com.dev.safehajj.Utils.GeneralFunctions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -57,6 +58,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
 
     private OnFragmentInteractionListener mListener;
     private float DEFAULT_ZOOM=7;
+    ConnectionDetector connectionDetector;
 
     public MapFragment() {
         // Required empty public constructor
@@ -91,7 +93,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView= inflater.inflate(R.layout.fragment_map, container, false);
-
+        connectionDetector=new ConnectionDetector(getActivity());
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -128,7 +130,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback{
         mMap = googleMap;
         LatLng mecca = new LatLng(21.422510, 39.826168);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mecca,DEFAULT_ZOOM));
+        if (connectionDetector.isConnectingToInternet())
         loadDevices();
+        else showToast("No internet connection!");
     }
 
 

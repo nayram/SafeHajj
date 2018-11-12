@@ -6,4 +6,6 @@
     <color name="red">#ff6940</color>
     <color name="startblue">#4bb6ef</color>
     <color name="endblue">#4bb6ef</color>
+    <color name="white">#fff</color>
+    <color name="trans_black">#95000000</color>
 </resources>

@@ -1,6 +1,8 @@
 package com.dev.safehajj.HomeComponent;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +10,7 @@ import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -51,8 +54,8 @@ public class HomeActivity extends AppCompatActivity implements MapFragment.OnFra
                     setFragment("accountComponent");
 
                     return true;
-                case R.id.navigation_settings:
-
+                case R.id.navigation_logout:
+                        logout();
                     return true;
             }
             return false;
@@ -125,6 +128,27 @@ public class HomeActivity extends AppCompatActivity implements MapFragment.OnFra
 
         }
 
+    }
+
+    void logout(){
+        new AlertDialog.Builder(this)
+                .setPositiveButton("Logout", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        GeneralFunctions.loogout();
+                        dialogInterface.dismiss();
+                        finish();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                })
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to logout?")
+                .show();
     }
 
     @Override

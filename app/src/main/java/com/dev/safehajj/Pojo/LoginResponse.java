@@ -9,6 +9,7 @@ public class LoginResponse {
     UserResponse Item;
     ThirdPartyResponse ThirdParty;
     int State;
+    String flypaas;
 
 
     public int getLoginType() {

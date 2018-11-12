@@ -1,15 +1,32 @@
 package com.dev.safehajj.AccountComponent;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.dev.safehajj.MapComponent.MapFragment;
 import com.dev.safehajj.R;
+import com.dev.safehajj.Utils.GeneralFunctions;
+
+import java.util.Map;
+
+import gun0912.tedbottompicker.TedBottomPicker;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +45,8 @@ public class AccountFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 101;
+    ImageView profile_image;
     private MapFragment.OnFragmentInteractionListener mListener;
 
     public AccountFragment() {
@@ -39,8 +57,6 @@ public class AccountFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment AccountFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -60,7 +76,23 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_account, container, false);
+
+        View rootview =inflater.inflate(R.layout.fragment_account, container, false);
+        profile_image=(ImageView)rootview.findViewById(R.id.profile_image);
+
+        if (GeneralFunctions.getProfileImage() !=null){
+            Glide.with(getActivity())
+                    .load(GeneralFunctions.getProfileImage())
+                    .into(profile_image);
+        }
+        profile_image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                launchImagePicker();
+            }
+        });
+        return  rootview;
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -85,6 +117,53 @@ public class AccountFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    void launchImagePicker(){
+        int permissionWriteEXTERNAL= ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permissionWriteEXTERNAL == PackageManager.PERMISSION_GRANTED){
+            openPicker();
+        }else {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+        }
+
+    }
+    void openPicker(){
+        TedBottomPicker tedBottomPicker = new TedBottomPicker.Builder(getActivity())
+                .setOnImageSelectedListener(new TedBottomPicker.OnImageSelectedListener() {
+                    @Override
+                    public void onImageSelected (final Uri uri) {
+                        // here is selected uri
+                        GeneralFunctions.setProfileImage(uri);
+                        Glide.with(getActivity())
+                                .load(uri)
+                                .into(profile_image);
+
+
+
+
+                    }
+                })
+                .create();
+        tedBottomPicker.show(getActivity().getSupportFragmentManager());
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:{
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openPicker();
+                }
+            }
+
+        }
     }
 
     /**

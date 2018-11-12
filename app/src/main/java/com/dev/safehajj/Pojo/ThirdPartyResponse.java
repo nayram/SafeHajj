@@ -7,7 +7,7 @@ public class ThirdPartyResponse {
     int UserID;
     String ThirdImg;
     String ThirdName;
-    int ThirdType;
+    String ThirdType;
     String ThirdID;
 
     public int getUserID() {
@@ -22,7 +22,7 @@ public class ThirdPartyResponse {
         return ThirdName;
     }
 
-    public int getThirdType() {
+    public String getThirdType() {
         return ThirdType;
     }
 

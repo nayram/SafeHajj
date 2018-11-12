@@ -19,4 +19,5 @@
     <string name="no_blood_sugar_data">No data on blood sugar level</string>
     <string name="no_distance_data">No data on distance travelled</string>
     <string name="no_calorie_data">No data on calorie</string>
+    <string name="title_logout">Logout</string>
 </resources>
